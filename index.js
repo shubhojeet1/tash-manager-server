@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://tash-manager-server-mu.vercel.app"],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -19,12 +19,62 @@ const io = socketio(server, {
 
 connectDB();
 
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000", "https://tash-manager-server-mu.vercel.app"],
+  methods: ["GET", "POST"],
+  credentials: true,
+}));
 app.use(express.json());
 
 app.use((req, res, next) => {
   req.io = io;
   next();
+});
+
+// Root route to serve a simple HTML page
+app.get("/", (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Task Manager</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          background-color: #f4f4f4;
+        }
+        .container {
+          text-align: center;
+          background-color: #ffffff;
+          padding: 50px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+          color: #333;
+        }
+        p {
+          color: #666;
+        }
+     
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Welcome to Task Manager Server</h1>
+        <p>This is the backend service for managing tasks and users.</p>
+       
+      </div>
+    </body>
+    </html>
+  `);
 });
 
 app.use("/api/auth", require("./routes/authRoutes"));
