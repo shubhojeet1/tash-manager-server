@@ -20,8 +20,8 @@ This is the backend for the Task Manager application, built with Node.js, Expres
 
 Create a .env file in the root directory with the following:
 
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
+MONGO_URI="_Add_Mongodb_Connection_String"
+JWT_SECRET="_Add_Secret_Key"
 PORT=8000
 
 ## Running the Server
