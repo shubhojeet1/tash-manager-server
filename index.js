@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = socketio(server, {
   cors: {
     origin: ["http://localhost:3000", "https://task-manager-client-orcin.vercel.app"],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
 });
@@ -21,7 +21,7 @@ connectDB();
 
 app.use(cors({
   origin: ["http://localhost:3000", "https://task-manager-client-orcin.vercel.app"],
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
 app.use(express.json());
