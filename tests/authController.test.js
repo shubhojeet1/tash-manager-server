@@ -119,7 +119,7 @@ describe("Auth Controller - Login", () => {
     };
 
     User.findOne.mockResolvedValue(mockUser);
-    bcrypt.compare.mockResolvedValue(true); // Passwords match
+    bcrypt.compare.mockResolvedValue(true); 
     jwt.sign.mockImplementation((payload, secret, options, callback) => {
       callback(null, "mockToken");
     });
@@ -172,7 +172,7 @@ describe("Auth Controller - Login", () => {
     };
 
     User.findOne.mockResolvedValue(mockUser);
-    bcrypt.compare.mockResolvedValue(false); // Passwords do not match
+    bcrypt.compare.mockResolvedValue(false); 
 
     await login(req, res);
 
