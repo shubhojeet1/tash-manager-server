@@ -1,4 +1,4 @@
-const Task = require('../models/Task');
+const Task = require("../models/Task");
 
 exports.getTasks = async (req, res) => {
   try {
@@ -6,7 +6,7 @@ exports.getTasks = async (req, res) => {
     res.json(tasks);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 };
 
@@ -23,66 +23,61 @@ exports.createTask = async (req, res) => {
     });
 
     const task = await newTask.save();
-    req.io.emit('taskAdded', task); // Emit event when task is added
+    req.io.emit("taskAdded", task);
     res.json(task);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 };
 
 exports.updateTask = async (req, res) => {
-    const { title, description, status, dueDate } = req.body;
-  
-    try {
-      let task = await Task.findById(req.params.id);
-  
-      if (!task) {
-        return res.status(404).json({ msg: 'Task not found' });
-      }
-  
-      if (task.user.toString() !== req.user.id) {
-        return res.status(401).json({ msg: 'Not authorized' });
-      }
-  
-      task = await Task.findByIdAndUpdate(
-        req.params.id,
-        { $set: { title, description, status, dueDate } },
-        { new: true }
-      );
-  
-      req.io.emit('taskUpdated', task); // Emit event when task is updated
-      res.json(task);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+  const { title, description, status, dueDate } = req.body;
+
+  try {
+    let task = await Task.findById(req.params.id);
+
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
     }
-  };
-  
+
+    if (task.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    task = await Task.findByIdAndUpdate(
+      req.params.id,
+      { $set: { title, description, status, dueDate } },
+      { new: true }
+    );
+
+    req.io.emit("taskUpdated", task);
+    res.json(task);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
 
 exports.deleteTask = async (req, res) => {
-    try {
-      const task = await Task.findById(req.params.id);
-  
-      if (!task) {
-        return res.status(404).json({ msg: 'Task not found' });
-      }
-  
-      // Check if the task belongs to the user making the request
-      if (task.user.toString() !== req.user.id) {
-        return res.status(401).json({ msg: 'Not authorized' });
-      }
-  
-      // Use findByIdAndDelete to remove the task
-      await Task.findByIdAndDelete(req.params.id);
-  
-      // Emit event when the task is deleted
-      req.io.emit('taskDeleted', task._id);
-  
-      res.json({ msg: 'Task removed' });
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+  try {
+    const task = await Task.findById(req.params.id);
+
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
     }
-  };
-  
+
+    if (task.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    await Task.findByIdAndDelete(req.params.id);
+
+    req.io.emit("taskDeleted", task._id);
+
+    res.json({ msg: "Task removed" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
