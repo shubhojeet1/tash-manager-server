@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Root route 
+
 app.get("/", (req, res) => {
   res.send(`
     <!DOCTYPE html>

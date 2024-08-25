@@ -1,15 +1,4 @@
 const Task = require("../models/Task");
-
-exports.getTasks = async (req, res) => {
-  try {
-    const tasks = await Task.find({ user: req.user.id });
-    res.json(tasks);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-};
-
 exports.createTask = async (req, res) => {
   const { title, description, status, dueDate } = req.body;
 
@@ -25,6 +14,16 @@ exports.createTask = async (req, res) => {
     const task = await newTask.save();
     req.io.emit("taskAdded", task);
     res.json(task);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find({ user: req.user.id });
+    res.json(tasks);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
