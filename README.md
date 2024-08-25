@@ -26,13 +26,14 @@ PORT=8000
 
 ## Running the Server
 
-Start the server in development mode:
+Start the server :
 
    npm run dev
 
-Or in production mode:
+## Testing 
 
-   npm start
+- npm test
+
 
 ## API Endpoints
 
